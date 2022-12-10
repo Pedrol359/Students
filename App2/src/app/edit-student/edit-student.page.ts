@@ -21,7 +21,7 @@ export class EditStudentPage implements OnInit {
   public validationMessages: object;
 
   constructor(private studentService: StudentService, private fb: FormBuilder, private router: Router, private alertController: AlertController, private activatedRoute: ActivatedRoute) {
-    this.student = new Student
+    this.student = new Student();
   }
 
   ngOnInit() {
@@ -29,8 +29,20 @@ export class EditStudentPage implements OnInit {
       this.id = params.id;
       this.studentService.getStudentById(params.id).subscribe(item => {
         this.student = item as Student;
+        this.myForm = this.fb.group({
+          controlnumber:[this.student.controlnumber, Validators.compose([Validators.minLength(8), Validators.required, Validators.pattern('^[0-9]+$')])],
+          name:[this.student.name, Validators.required],
+          curp:[this.student.curp, Validators.compose([Validators.required, Validators.pattern('^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$')])],
+          age:[this.student.age, Validators.compose([Validators.required, Validators.min(17)])],
+          nip:[this.student.nip, Validators.compose([Validators.required, Validators.min(10)])],
+          email:[this.student.email, Validators.compose([Validators.required, Validators.email])],
+          career:[this.student.career, Validators.required],
+          photo:[this.student.photo, Validators.compose([Validators.required])]
+        });
+        console.log(this.myForm.valid);
       })
     });
+    this.student = new Student();
     this.myForm = this.fb.group({
       controlnumber:[this.student.controlnumber, Validators.compose([Validators.minLength(8), Validators.required, Validators.pattern('^[0-9]+$')])],
       name:[this.student.name, Validators.required],
